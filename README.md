@@ -1,7 +1,21 @@
 # Linux 환경에서 Crontab을 통해 환경 정보 수집하기 📊
 <br>
 
-## /var/log 디렉터리에 어떤 정보가 저장될까?
+## 🛠 Crotab 및 사용 목적 
+### 1️⃣ 자동화
+- 리눅스 서버에서 반복적인 작업 자동화 가능
+- 특정 시간마다 실행해야 하는 모니터링, 백업, 데이터 수집, 유지보수 작업을 자동으로 수행
+  
+### 2️⃣ 시스템 관리 및 유지보수
+- 로그 파일 정리, 패키지 업데이트, 불필요한 파일 삭제 등의 작업을 자동화하여 서버의 안정성 유지
+
+### 3️⃣ 보안 모니터링 및 경고
+- 로그인 실패 기록, Brute Force 공격 감지, 시스템 상태 모니터링 등을 자동화하여 보안 강화 가능
+
+### 4️⃣ 시스템 리소스 모니터링
+- CPU 사용률, 메모리 사용량, 디스크 공간 등을 주기적으로 확인하여 서버 장애 예방
+
+## ✅ /var/log 디렉터리에 어떤 정보가 저장될까?
 
 ### 1. 시스템 관련 로그 🖥️
 #### 1. `/var/log/syslog` 또는 `/var/log/messages`
@@ -99,11 +113,11 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 ![alt text](image-1.png)
 
 #### 2. Crontab 설정 🗓️
-    ```
+
     crontab -e
     
     */5 * * * * last -a | awk '{print $1}' | sort | uniq -c | awk '$1 >= 10 {print $2}' >> /var/log/monitoring/multiple_login_users.log
-    ```
+    
 - **`awk '{print $1}'`** : **`awk`**를 사용하여 첫번째 필드인 사용자 명만 추출 
     ```
     root
