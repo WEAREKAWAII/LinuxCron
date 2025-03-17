@@ -6,7 +6,7 @@
 
 <div align=center>
   
-|<img src="https://avatars.githubusercontent.com/u/193798531?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/74342019?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/121565744?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/60309978?v=4" width="150" height="150"/>|
+|<img src="https://avatars.githubusercontent.com/u/193798531?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/74342019?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/121565744?v=4" width="150" height="150"/>|<img src="https://github.com/user-attachments/assets/ab16ada7-d9fc-440b-b504-a2968ad73278" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|
 |김리영<br/>[@riyeong0916](https://github.com/riyeong0916)|나원호<br/>[@CooolRyan](https://github.com/CooolRyan)|이은정<br/>[@eundeom](https://github.com/eundeom)|박정호<br/>[@Jeongho427](https://github.com/Jeongho427)|
 
