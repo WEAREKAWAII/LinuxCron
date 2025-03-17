@@ -1,6 +1,18 @@
 # Linux 환경에서 Crontab을 통해 환경 정보 수집하기 📊
 <br>
 
+
+## 팀원 소개
+
+<div align=center>
+  
+|<img src="https://avatars.githubusercontent.com/u/193798531?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/74342019?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/121565744?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/60309978?v=4" width="150" height="150"/>|
+|:-:|:-:|:-:|:-:|
+|김리영<br/>[@riyeong0916](https://github.com/riyeong0916)|나원호<br/>[@CooolRyan](https://github.com/CooolRyan)|이은정<br/>[@eundeom](https://github.com/eundeom)|박정호<br/>[@Jeongho427](https://github.com/Jeongho427)|
+
+</div>
+<br>
+
 ## 🛠 Crotab 및 사용 목적 
 ### 1️⃣ 자동화
 - 리눅스 서버에서 반복적인 작업 자동화 가능
@@ -14,6 +26,8 @@
 
 ### 4️⃣ 시스템 리소스 모니터링
 - CPU 사용률, 메모리 사용량, 디스크 공간 등을 주기적으로 확인하여 서버 장애 예방
+
+<br>
 
 ## ✅ /var/log 디렉터리에 어떤 정보가 저장될까?
 
