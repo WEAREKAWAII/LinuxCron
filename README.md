@@ -67,6 +67,62 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 
 ![alt text](image.png)
 
-## 로그인 정보 로그 수집하기
+## 이상 접속 확인하기 
+### 1. 하루에 10번 로그인한 사용자 확인 
+1. last 명령어 : /var/log/wtmp 로그 
+- 시스템에 로그이한 사용자 목록을 출력
+- -a : IP 또는 호스트 정보도 같이 출력 
+![alt text](image-1.png)
 
+2. crontab 설정 
+    ```
+    crontab -e
+
+    */5 * * * * last -a | awk '{print $1}' | sort | uniq -c | awk '$1 >= 10 {print $2}' >> /var/log/monitoring/multiple_login_users.log
+
+
+    ```
+- `awk '{print $1}'` : `awk`를 사용하여 첫번째 필드인 사용자 명만 추출 
+    ```
+    root
+    ubuntu
+    ubuntu
+    ubuntu
+    ```
+- `sort` : 사용자명 정렬
+- `uniq -c` : 동일한 사용자명을 그룹화하고 카운트 
+    ```
+    1 root
+    10 ubuntu
+    ```
+- `awk '$1 >= 10 {print $2}'` : 로그인 횟수가 10회 이상인 사용자만 출력 
+    ```
+    ubuntu
+    ```
+- `>> /var/log/monitoring/multiple_login_users.log` : 결과를 /var/log/monitoring/multiple_login_users.log 파일에 저장
+- */5 * * * * : 5분마다 로그인 횟수가 10회 이상인 사용자들의 목록을 이 파일에 기록
+
+3. 저장된 로그 확인 
+![alt text](image-2.png)
+- last 명령어어는 /var/log/wtmp에서 데이터를 가져오는데 wtmp 파일에는 시스템이 재부팅된 기록로 포함되기 때문에 reboot가 가치 출력 
+- `grep -v reboot`를 추가하면 reboot 필터링 가능 
+
+### 2. 로그인 실패한 사용자 출력 -> Brute Force Attack
+1. /var/log/auth.log
+- 리눅스 시스템에서 인증 관련 로그를 저장하는 파일로, 사용자가 시스템에 로그인하려고 시도할 때마다 로그인 성공/실패 여부가 기록
+- `Failed password` : SSH 로그인 실패 시 기록되는 메시지
+![alt text](image-3.png)
+
+2. crontab 설정 
+    ```
+    crontab -e
+
+    * * * * * grep -a 'Failed password' /var/log/auth.log >> /var/log/monitoring/failed_login_users.log
+
+    ```
+    - grep -a 'Failed password' /var/log/auth.log : `/var/log/auth.log`에서 `"Failed password"` 문자열을 포함 여부검색 
+    - `>> /var/log/monitoring/failed_login_users.log` : 검색된 결과를 /var/log/monitoring/failed_login_users.log 파일에 저장
+
+3. 저장된 로그 확인 
+![alt text](image-4.png)
 ## CPU USAGE 정보 수집하기
