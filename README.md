@@ -196,4 +196,4 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
        : 결과를 cpu_usage.log에 저장
       <br>
 #### 3. 결과 확인 🔍
-       <img src="https://github.com/user-attachments/assets/c3bd4a84-e4b3-4f57-b60a-11128479eebe" width=500/>
+<img src="https://github.com/user-attachments/assets/c3bd4a84-e4b3-4f57-b60a-11128479eebe" width=500/>
