@@ -1,8 +1,9 @@
-# Linux 환경에서 Crontab을 통해 환경 정보 수집하기
+# Linux 환경에서 Crontab을 통해 환경 정보 수집하기 📊
+<br>
 
 ## /var/log 디렉터리에 어떤 정보가 저장될까?
 
-### 1. 시스템 관련 로그 
+### 1. 시스템 관련 로그 🖥️
 #### 1. `/var/log/syslog` 또는 `/var/log/messages`
 - 일반적인 모든 시스템 이벤트를 기록하며, 서비스 상태, 부팅 과정, 커널 메시지, 네트워크 관련 메시지 등 포함
 - Ubuntu/Debian 계열: /var/log/syslog
@@ -34,15 +35,18 @@
 #### - `/var/log/cron.log`
 - Cron 작업 실행 기록하며, Cron 실행 여부 및 오류 확인 가능
 
-## 1. Error 로그 수집하기
+<br>
+
+## 1. Error 로그 수집하기 ⚠️
 ### Syslog에서 Error 로그 확인하기 
-#### 1. `/var/log/syslog` 로그에서 Error 로그 확인 
+#### 1. `/var/log/syslog` 로그에서 Error 로그 확인 🖥️
 ```
 cat /var/log/syslog | grep "error"
 ```
-![image](https://github.com/user-attachments/assets/96726070-285c-494d-97d4-b5cd5c771a34)
 
-#### 2. Monitor를 위한 Shell 작성
+<img src="https://github.com/user-attachments/assets/96726070-285c-494d-97d4-b5cd5c771a34" width=700>
+
+#### 2. Monitor를 위한 Shell 작성 🔍
 ```
 vi /usr/local/bin/log_monitor.sh
 ```
@@ -64,7 +68,7 @@ wc -l < "$LOG_FILE" > "$LOG_HISTORY"
 
 ```
 
-#### 3. Crontab 설정 
+#### 3. Crontab 설정 🗓️
 
 ```
 crontab -e
@@ -72,7 +76,7 @@ crontab -e
 * * * * * /usr/local/bin/log_monitor.sh
 ```
 
-#### 4. 확인을 위한 임의의 에러 로그 발생
+#### 4. 확인을 위한 임의의 에러 로그 발생 🚨
 ```
 logger -p user.err "TEST ERROR: This is a simulated error for testing"
 
@@ -81,18 +85,20 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 ```
 - `logger` : 사용자 정의 메세지를 로그에 기록
 
-#### 5. 결과 확인
+#### 5. 결과 확인 🔍
 
 ![alt text](image.png)
 
-## 이상 접속 확인하기 
-### 1. 하루에 10번 로그인한 사용자 확인하기
-#### 1. **`/var/log/wtmp`** 로그에서 로그인 사용자 정보 확인 
+<br>
+
+## 이상 접속 확인하기 🕵️‍♂️
+### 1. 하루에 10번 로그인한 사용자 확인하기 🖥️
+#### 1. **`/var/log/wtmp`** 로그에서 로그인 사용자 정보 확인 📝
 - **`last`** 명령어는 /var/log/wtmp에서 데이터를 가져와 시스템에 로그인한 사용자 목록을 출력
 - **`-a`** : IP 또는 호스트 정보도 같이 출력 
 ![alt text](image-1.png)
 
-#### 2. Crontab 설정 
+#### 2. Crontab 설정 🗓️
     ```
     crontab -e
     
@@ -118,7 +124,7 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 - **`>> /var/log/monitoring/multiple_login_users.log`** : 결과를 **`/var/log/monitoring/multiple_login_users.log`** 파일에 저장
 - **`*/5 * * * *`** : 5분마다 로그인 횟수가 10회 이상인 사용자들의 목록을 이 파일에 기록
 
-#### 3. 결과 확인 
+#### 3. 결과 확인 🔍
 ![alt text](image-2.png)
 - **`last`** 명령어는 **`/var/log/wtmp`**에서 데이터를 가져오는데 wtmp 파일에는 시스템이 재부팅된 기록로 포함되기 때문에 reboot가 같이 출력 
 - **`grep -v reboot`**를 추가하면 reboot 필터링 가능 
@@ -129,7 +135,7 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 - **`Failed password`**: SSH 로그인 실패 시 기록되는 메시지
 ![alt text](image-3.png)
 
-#### 2. Crontab 설정 
+#### 2. Crontab 설정 🗓️
     ```
     crontab -e
 
@@ -139,18 +145,20 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 - **`grep -a 'Failed password' /var/log/auth.log`** : **`/var/log/auth.log`에서 `"Failed password"`** 문자열을 포함 여부검색 
 - **`>> /var/log/monitoring/failed_login_users.log`** : 검색된 결과를 **`/var/log/monitoring/failed_login_users.log`** 파일에 저장
 
-#### 3. 결과 확인  
+#### 3. 결과 확인 🔍
 ![alt text](image-4.png)
 
-## CPU USAGE 정보 수집하기
-### CPU 사용량 80% 이상인 로그 확인하기
-#### 1. `top` 명령어로 cpu 및 메모리 확인
+<br>
+
+## CPU USAGE 정보 수집하기 🖥️
+### CPU 사용량 80% 이상인 로그 확인하기 ⚡
+#### 1. `top` 명령어로 cpu 및 메모리 확인 🖥️
    <br>
 
    <img src="https://github.com/user-attachments/assets/47a14af0-4d06-4a0e-a5a9-d5c2bc62c1d1" width=500/>
 
-#### 2. Crontab 설정 
-- 1분 마다 cpu 사용량 총 합이 80% 이상일 경우 **`top`** 명령어 실행 결과를 **`/var/log/cpu_usage.log`**에 저장하여 cpu 및 메모리 사용 내역 확인 가능
+#### 2. Crontab 설정 🗓️
+- 1분 마다 cpu 사용량 총 합이 80% 이상일 경우 **`top`** 명령어 실행 결과를 `/var/log/cpu_usage.log`에 저장하여 cpu 및 메모리 사용 내역 확인 가능
    ```
    */1 * * * * cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}') && if (( $(echo "$cpu_usage >= 80" | bc -l) )); then echo "$(date) - CPU Usage: $cpu_usage%" >> /var/log/cpu_usage.log;
    ```
@@ -159,6 +167,5 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
     - `>> /var/log/cpu_usage.log`
        : 결과를 cpu_usage.log에 저장
       <br>
-#### 3. 결과 확인
-    <br>
+#### 3. 결과 확인 🔍
        <img src="https://github.com/user-attachments/assets/c3bd4a84-e4b3-4f57-b60a-11128479eebe" width=500/>
