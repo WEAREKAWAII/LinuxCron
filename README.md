@@ -1,36 +1,52 @@
 # Linux 환경에서 Crontab을 통해 환경 정보 수집하기
 
-- ## /var/log 디렉터리에 어떤 정보가 저장될까?
+## /var/log 디렉터리에 어떤 정보가 저장될까?
 
-### CentOS
+### 1. 시스템 관련 로그 
+#### 1. `/var/log/syslog` 또는 `/var/log/messages`
+- 일반적인 모든 시스템 이벤트를 기록하며, 서비스 상태, 부팅 과정, 커널 메시지, 네트워크 관련 메시지 등 포함
+- Ubuntu/Debian 계열: /var/log/syslog
+- RHEL/CentOS 계열: /var/log/messages
 
-- /var/log/message - 다음을 제외한 모든 syslog 메시지
+#### 2. `/var/log/dmesg`
+- 부팅 시 커널 메시지를 기록하며, 하드웨어, 장치 드라이버, 시스템 부팅 과정에서 발생한 이벤트를 저장
 
-- /var/log/secure - 보안 및 인증 관련 메시지 및 오류
+#### 3. `/var/log/boot.log`
+- 부팅 과정의 모든 이벤트를 기록
 
-- /var/log/maillog - 메일 서버 관련 메시지 및 오류
+### 2. 사용자 및 인증 관련 로그
+#### - `/var/log/auth.log` 또는 `/var/log/secure`
+- 사용자 로그인, 인증 관련 이벤트가 기록되며, sudo 명령어 사용 내역, SSH 로그인 시도, 비밀번호 변경 등 보안과 관련된 활동 포함
+- Ubuntu/Debian 계열: `/var/log/auth.log`
+- RHEL/CentOS 계열: `/var/log/secure`
 
-- /var/log/cron - 주기적으로 실행한 작업과 관련된 로그 파일
+### 3. 패키지 및 업데이트 로그
+#### - `/var/log/dpkg.log`, `/var/log/yum.log`
+- 패키지 설치 및 삭제 로그 기록
+- Ubuntu/Debian 계열: `/var/log/dpkg.log`
+- RHEL/CentOS 계열: `/var/log/yum.log`
 
-- /var/log/boot.log - 시스템 시작과 관련된 로그 파일
+### 4. 네트워크 및 방화벽 로그
+#### - `/var/log/kern.log`
+- 커널에서 발생하는 모든 이벤트가 기록되며, 네트워크 인터페이스 문제, 드라이버 오류, 방화벽 관련 문제 등 확인 가능
 
-### Ubuntu
+### 5. Cron 작업 관련 로그
+#### - `/var/log/cron.log`
+- Cron 작업 실행 기록하며, Cron 실행 여부 및 오류 확인 가능
 
-- /var/log/syslog - 일반적인 시스템 로그
-
-- /var/log/auth.log - 인증 및 보안 관련 로그
-
-
-## Error 로그 수집하기
-- syslog에서 error 확인해보기
+## 1. Error 로그 수집하기
+### Syslog에서 Error 로그 확인하기 
+#### 1. `/var/log/syslog` 로그에서 Error 로그 확인 
 ```
 cat /var/log/syslog | grep "error"
 ```
-- monitor를 위해 shell 작성
+![image](https://github.com/user-attachments/assets/96726070-285c-494d-97d4-b5cd5c771a34)
+
+#### 2. Monitor를 위한 Shell 작성
 ```
 vi /usr/local/bin/log_monitor.sh
 ```
-- 중복 내용 없이 안 읽은 부불에 대해서만 로그 읽어오기
+- 중복 내용 없이 안 읽은 부분에 대해서만 로그 읽어오기
 ```
 #!/bin/bash
 LOG_FILE="/var/log/syslog"
@@ -48,7 +64,7 @@ wc -l < "$LOG_FILE" > "$LOG_HISTORY"
 
 ```
 
-- 1분마다 로그 기록 수집
+#### 3. crontab 설정 
 
 ```
 crontab -e
@@ -56,19 +72,21 @@ crontab -e
 * * * * * /usr/local/bin/log_monitor.sh
 ```
 
-- 에러 로그 생성하기
+#### 4. 확인을 위한 임의의 에러 로그 발생
 ```
 logger -p user.err "TEST ERROR: This is a simulated error for testing"
 
 
 for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sleep 1; done
 ```
-- 결과 화면
+- `logger` : 사용자 정의 메세지를 로그에 기록
+
+#### 5. 결과 확인
 
 ![alt text](image.png)
 
 ## 이상 접속 확인하기 
-### 1. 하루에 10번 로그인한 사용자 확인 
+### 1. 하루에 10번 로그인한 사용자 확인 하기
 1. last 명령어 : /var/log/wtmp 로그 
 - 시스템에 로그이한 사용자 목록을 출력
 - -a : IP 또는 호스트 정보도 같이 출력 
