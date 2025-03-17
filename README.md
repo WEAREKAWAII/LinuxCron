@@ -126,3 +126,22 @@ for i in {1..5}; do logger -p user.err "TEST ERROR #$i: Simulated error log"; sl
 3. 저장된 로그 확인 
 ![alt text](image-4.png)
 ## CPU USAGE 정보 수집하기
+### CPU 사용량 80% 이상인 로그 확인하기
+1. top 명령어로 cpu 및 메모리 확인
+   <br>
+
+   <img src="https://github.com/user-attachments/assets/47a14af0-4d06-4a0e-a5a9-d5c2bc62c1d1" width=500/>
+
+2. cron 설정
+       1분 마다 cpu 사용량 총 합이 80% 이상일 경우 top 명령어 실행 결과를 /var/log/cpu_usage.log에 저장하여 cpu 및 메모리 사용 내역 확인 가능
+   ```
+   */1 * * * * cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}') && if (( $(echo "$cpu_usage >= 80" | bc -l) )); then echo "$(date) - CPU Usage: $cpu_usage%" >> /var/log/cpu_usage.log;
+   ```
+    - `grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}') && if (( $(echo "$cpu_usage >= 80" | bc -l) ))`
+       : cpu 사용률이 80 이상인 로그 검색
+    - `>> /var/log/cpu_usage.log`
+       : 결과를 cpu_usage.log에 저장
+      <br>
+3. 결과 확인
+    <br>
+       <img src="https://github.com/user-attachments/assets/c3bd4a84-e4b3-4f57-b60a-11128479eebe" width=500/>
